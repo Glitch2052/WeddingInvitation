@@ -22,8 +22,17 @@
     src="video/envelope-open.mp4"
     poster="video/envelope-poster.jpg"
     playsinline
+    webkit-playsinline="true"
     preload="auto"
+    muted
   ></video>
+
+  <!-- Kept as its own layer (not just the <video poster> attribute)
+       because some mobile browsers drop the poster the instant
+       play() is called, before a real frame is ready — showing a
+       black flash. We hide this manually once playback has
+       genuinely started rendering frames (see js/envelope-video.js). -->
+  <img id="envelope-poster-img" src="video/envelope-poster.jpg" alt="" class="envelope-poster-img">
 
   <button type="button" id="seal-hit" class="seal-hit" aria-label="Open your invitation"></button>
   <p class="tap-hint" id="tap-hint">tap the seal to open</p>
@@ -128,7 +137,7 @@
 </main>
 
 <audio id="bg-music" loop preload="none">
-  <source src="audio/song.mp3" type="audio/mpeg">
+  <source src="audio/wedding_song.mp3" type="audio/mpeg">
 </audio>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

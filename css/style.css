@@ -109,6 +109,19 @@ button{ font-family: inherit; cursor: pointer; }
   display: block;
   background: var(--olive-deep);
 }
+.envelope-poster-img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+  pointer-events: none;
+}
+.envelope-poster-img.hide{
+  display: none;
+}
 
 .seal-hit{
   position: absolute;
