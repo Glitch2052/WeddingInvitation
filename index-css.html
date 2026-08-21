@@ -12,21 +12,44 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+SC:wght@500;600&family=Meddon&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/envelope-css-legacy.css">
 </head>
 <body>
 
-<!-- ============ ENVELOPE INTRO (video) ============ -->
+<!-- ============ ENVELOPE INTRO (CSS 3D) ============ -->
 <div id="envelope-screen">
-  <video
-    id="envelope-video"
-    src="video/envelope-open.mp4"
-    poster="video/envelope-poster.jpg"
-    playsinline
-    preload="auto"
-  ></video>
-
-  <button type="button" id="seal-hit" class="seal-hit" aria-label="Open your invitation"></button>
-  <p class="tap-hint" id="tap-hint">tap the seal to open</p>
+  <div class="petal-field" id="petal-field-intro" aria-hidden="true"></div>
+  <div class="envelope-stage" id="envelope-stage">
+    <div class="envelope" id="envelope">
+      <div class="env-back">
+        <img class="env-img" src="images/envelope/back.jpg" alt="" onerror="this.remove()">
+      </div>
+      <div class="env-card">
+        <img class="env-img env-card__texture" src="images/envelope/card-texture.jpg" alt="" onerror="this.remove()">
+        <p class="env-card__eyebrow">together with their families</p>
+        <p class="env-card__names">Girl <span class="amp">&amp;</span> Boy</p>
+        <p class="env-card__date">24 · November</p>
+      </div>
+      <div class="env-front">
+        <img class="env-img" src="images/envelope/front.jpg" alt="" onerror="this.remove()">
+      </div>
+      <div class="env-flap" id="env-flap">
+        <div class="env-flap__face env-flap__face--front">
+          <img class="env-img" src="images/envelope/flap-outer.jpg" alt="" onerror="this.remove()">
+        </div>
+        <div class="env-flap__face env-flap__face--back">
+          <img class="env-img" src="images/envelope/flap-inner.jpg" alt="" onerror="this.remove()">
+        </div>
+      </div>
+      <button type="button" id="seal" class="seal" aria-label="Open your invitation">
+        <span class="seal__glow" aria-hidden="true"></span>
+        <img class="env-img seal__img" src="images/envelope/seal.png" alt="" onerror="this.remove()">
+        <span class="seal__ring"></span>
+        <span class="seal__initials">G&nbsp;B</span>
+      </button>
+    </div>
+    <p class="tap-hint" id="tap-hint">tap the seal to open</p>
+  </div>
 </div>
 
 <!-- ============ MAIN INVITATION ============ -->
@@ -133,7 +156,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/envelope-video.js"></script>
+<script src="js/envelope.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

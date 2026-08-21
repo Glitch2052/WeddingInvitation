@@ -78,6 +78,28 @@
   // lock scroll while envelope is showing
   document.body.style.overflow = 'hidden';
 
+  // Subtle pointer/gyroscope-style tilt on the closed envelope —
+  // purely decorative, gives it a "reach out and touch it" feel.
+  const stage = document.getElementById('envelope-stage');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches === false) {
+    stage.addEventListener('pointermove', (e) => {
+      if (opened) return;
+      const rect = stage.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      gsap.to(envelope, {
+        rotateY: px * 14,
+        rotateX: -py * 10,
+        duration: 0.6,
+        ease: 'power2.out'
+      });
+    });
+    stage.addEventListener('pointerleave', () => {
+      if (opened) return;
+      gsap.to(envelope, { rotateY: 0, rotateX: 0, duration: 0.8, ease: 'power3.out' });
+    });
+  }
+
   seal.addEventListener('click', openEnvelope);
   seal.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {

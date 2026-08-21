@@ -5,16 +5,64 @@ intro, scroll-reveal animations (GSAP), a live countdown, and an RSVP
 form — built as static HTML/CSS/JS so it hosts for free on GitHub
 Pages.
 
+## Three envelope versions
+
+This project has grown **three** versions of the intro as we tried
+different approaches — `index.html` (the one that's live/default)
+now uses the video version:
+
+- **`index.html`** — **video-based (current default).** Plays
+  `video/envelope-open.mp4` when the seal is tapped; the screen
+  simply fades to reveal the invitation once the video ends. No
+  animated fold/tilt — the opening motion lives entirely in the
+  video itself.
+- **`index-css.html`** — the earlier CSS 3D transform version
+  (lightweight, no video/library needed). Kept for reference.
+- **`index-threejs.html`** — the earlier real lit 3D scene built with
+  [Three.js](https://threejs.org). Kept for reference. Pulls in
+  Three.js from a CDN (~600KB extra).
+
+All three share the same `css/style.css`, `js/main.js`, and the rest
+of the page (countdown, sections, petals) — only the envelope intro
+differs: `js/envelope-video.js` (video), `js/envelope.js` (CSS), or
+`js/envelope-three.js` (Three.js).
+
+**To switch which version is live:** whichever file you want
+GitHub Pages to serve needs to be named `index.html` at the repo
+root — rename accordingly before pushing.
+
 ## File structure
 
 ```
-index.html          the whole site (one page)
-css/style.css        all styling — palette, type, envelope, sections
-js/envelope.js        the tap-to-open envelope animation
-js/main.js            scroll reveals, countdown, music toggle, RSVP
-audio/                 put your background song here (song.mp3)
-images/                 put your photos here
+index.html              the video-envelope version (current default)
+index-css.html            the CSS-envelope version (archived)
+index-threejs.html         the Three.js-envelope version (archived)
+css/style.css              all styling — palette, type, sections (shared)
+js/envelope-video.js       tap-to-play-video envelope logic
+js/envelope.js             the CSS tap-to-open envelope animation
+js/envelope-three.js       the Three.js tap-to-open envelope animation
+js/main.js                  scroll reveals, countdown, music toggle, petals (shared)
+video/                       envelope-open.mp4 + its poster frame (see its README)
+audio/                       put your background song here (song.mp3)
+images/                       put your photos here
+images/envelope/              optional: photoreal envelope + wax seal art (CSS/Three.js versions only)
+images/particles/             optional: custom petal/flower art for the drifting effect
 ```
+
+## Envelope visuals
+
+The default (`index.html`) plays your video on tap and fades to the
+invitation when it ends — see `video/README.md` for how to swap in
+a different video. The CSS and Three.js versions are kept as
+alternatives; see `images/envelope/README.md` if you want to revisit
+either of those with photoreal texture art instead.
+
+## Immersive touches already included
+
+- Drifting petals (CSS-drawn by default, upgrades to `images/particles/petal.png` if you add one)
+- Parallax on the hero's corner leaves as you scroll
+- A subtle pointer-tilt on the closed envelope
+- A soft glowing pulse behind the wax seal
 
 ## 1. Personalize it
 

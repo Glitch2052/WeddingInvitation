@@ -21,7 +21,7 @@
 }
 
 *{ box-sizing: border-box; }
-html{ scroll-behavior: smooth; }
+html{ scroll-behavior: smooth; overflow-x: hidden; }
 
 body{
   margin:0;
@@ -31,6 +31,7 @@ body{
   font-size: 19px;
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -90,12 +91,8 @@ button{ font-family: inherit; cursor: pointer; }
   position: fixed;
   inset: 0;
   z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background:
-    radial-gradient(circle at 50% 20%, #4f5f3d 0%, var(--olive-deep) 65%);
-  transition: opacity .8s ease, visibility .8s ease;
+  background: #000;
+  transition: opacity .6s ease, visibility .6s ease;
 }
 #envelope-screen.hide{
   opacity: 0;
@@ -103,132 +100,46 @@ button{ font-family: inherit; cursor: pointer; }
   pointer-events: none;
 }
 
-.envelope-stage{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
-  perspective: 1600px;
-}
-
-.envelope{
-  position: relative;
-  width: min(78vw, 300px);
-  height: min(52vw, 200px);
-  transform-style: preserve-3d;
-}
-
-.env-back,
-.env-front{
+#envelope-video{
   position: absolute;
   inset: 0;
-  background: linear-gradient(155deg, #55663f, #3c4a2c);
-  border-radius: 4px;
-  box-shadow: 0 30px 60px rgba(0,0,0,.45);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--olive-deep);
 }
 
-.env-front{
-  clip-path: polygon(0 100%, 50% 42%, 100% 100%);
-  background: linear-gradient(160deg, #607249, #414f30);
-  z-index: 3;
-}
-
-.env-card{
-  position: absolute;
-  left: 6%;
-  right: 6%;
-  bottom: 8%;
-  height: 82%;
-  background: var(--cream);
-  border-radius: 2px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 18px 10px;
-  transform: translateY(0%);
-}
-.env-card__eyebrow{
-  margin:0;
-  font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--sage);
-}
-.env-card__names{
-  margin: 2px 0;
-  font-family: var(--font-display);
-  font-size: clamp(20px, 5vw, 26px);
-  color: var(--olive-deep);
-}
-.env-card__names .amp{
-  font-family: var(--font-script);
-  color: var(--gold);
-  padding: 0 4px;
-}
-.env-card__date{
-  margin:0;
-  font-size: 13px;
-  letter-spacing: .15em;
-  color: var(--olive);
-}
-
-.env-flap{
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 58%;
-  background: linear-gradient(200deg, #63754a, #465532);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transform-origin: top center;
-  transform: rotateX(0deg);
-  z-index: 4;
-  border-radius: 4px 4px 0 0;
-}
-
-.seal{
+.seal-hit{
   position: absolute;
   left: 50%;
-  top: 46%;
-  width: 62px;
-  height: 62px;
+  top: 50%;
+  width: 110px;
+  height: 110px;
   transform: translate(-50%, -50%);
-  z-index: 5;
   border: none;
+  background: transparent;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 30%, #fbf8f0, var(--wax) 55%, #ddd4bd 100%);
-  box-shadow: 0 6px 14px rgba(0,0,0,.4), inset 0 0 0 2px rgba(184,147,90,.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform .3s ease;
+  z-index: 2;
 }
-.seal:hover{ transform: translate(-50%, -50%) scale(1.06); }
-.seal__ring{
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
-  border: 1px dashed rgba(74,90,58,.35);
-}
-.seal__initials{
-  font-family: var(--font-display);
-  letter-spacing: .1em;
-  font-size: 15px;
-  color: var(--olive-deep);
+#envelope-screen.playing .seal-hit,
+#envelope-screen.playing .tap-hint{
+  display: none;
 }
 
 .tap-hint{
-  margin:0;
+  position: absolute;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
   font-family: var(--font-display);
   letter-spacing: .2em;
   text-transform: uppercase;
   font-size: 12px;
   color: var(--gold-soft);
   animation: pulse 2.2s ease-in-out infinite;
+  z-index: 2;
 }
 @keyframes pulse{
   0%,100%{ opacity: .55; }
@@ -470,6 +381,54 @@ button{ font-family: inherit; cursor: pointer; }
   font-size: 13px;
   color: var(--sage);
 }
+
+/* =========================================================
+   Petals — lightweight drifting particles, CSS-drawn by default.
+   Drop images/particles/petal.png in and petals use that art
+   instead automatically (see petal spawner in js/main.js).
+   ========================================================= */
+.petal-field{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 6;
+}
+.petal-field--site{ z-index: 15; }
+
+.petal{
+  position: absolute;
+  top: -5%;
+  width: 14px;
+  height: 14px;
+  background: var(--gold-soft);
+  border-radius: 0 60% 0 60%;
+  opacity: .75;
+  will-change: transform;
+  animation-name: petalFall, petalSway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: 1, infinite;
+}
+.petal--alt{ background: var(--sage); border-radius: 60% 0 60% 0; }
+.petal--img{ background: none; }
+.petal--img img{ width: 100%; height: 100%; object-fit: contain; display: block; }
+
+@keyframes petalFall{
+  from{ transform: translateY(-10vh) rotate(0deg); }
+  to{ transform: translateY(115vh) rotate(340deg); }
+}
+@keyframes petalSway{
+  0%,100%{ margin-left: 0; }
+  50%{ margin-left: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .petal-field{ display: none; }
+}
+
+/* Parallax leaves get their offset pushed in via inline transform
+   from js/main.js's scroll handler — this just guarantees a smooth start. */
+.leaf{ will-change: transform; }
 
 /* Reveal-on-scroll base state (GSAP will animate to visible) */
 .reveal{
