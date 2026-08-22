@@ -1,0 +1,520 @@
+:root {
+    /* Colors inspired by warm ivory, champagne, gold, deep sophisticated backgrounds */
+    --color-ivory: #FDFBF7;
+    --color-champagne: #F2E8D5;
+    --color-gold: #D4AF37;
+    --color-gold-light: #F3E5AB;
+    --color-gold-dark: #AA8529;
+    --color-text-dark: #3A3226;
+    --color-text-light: #FDFBF7;
+    --color-bg-deep: #1A1814; /* Deep sophisticated background for contrast if needed, though we use the frame */
+    
+    /* Typography */
+    --font-calligraphy: 'Great Vibes', cursive;
+    --font-serif: 'Playfair Display', serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-serif);
+    background-color: var(--color-bg-deep); /* Base background behind everything */
+    color: var(--color-text-dark);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base styles to constrain to mobile aspect ratio on desktop */
+@media (min-width: 768px) {
+    body {
+        display: flex;
+        justify-content: center;
+        background-color: #0c0b09;
+    }
+    
+    #envelope-screen,
+    #invitation-container {
+        width: 100%;
+        max-width: 430px; /* Max width of large mobile */
+        position: relative;
+        background-color: var(--color-bg-deep);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================================
+   ENVELOPE SCREEN
+   ========================================= */
+#envelope-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 1000;
+    background-color: var(--color-bg-deep);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 2s ease-in-out;
+}
+
+@media (min-width: 768px) {
+    #envelope-screen {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.video-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#envelope-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tap-hint {
+    position: absolute;
+    bottom: 15%;
+    z-index: 10;
+    color: var(--color-ivory);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-5px); }
+    100% { opacity: 0.5; transform: translateY(0); }
+}
+
+
+/* =========================================
+   MUSIC CONTROL
+   ========================================= */
+.music-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 40px;
+    height: 40px;
+    background: rgba(26, 24, 20, 0.6);
+    border: 1px solid var(--color-gold-dark);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-gold);
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+@media (min-width: 768px) {
+    .music-toggle {
+        right: calc(50% - 215px + 20px);
+    }
+}
+.music-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* =========================================
+   MAIN INVITATION CONTAINER
+   ========================================= */
+#invitation-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+.invitation-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2A251D 0%, #1A1814 100%);
+    z-index: -3;
+}
+@media (min-width: 768px) {
+    .invitation-bg {
+        position: absolute;
+    }
+}
+
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -2;
+}
+@media (min-width: 768px) {
+    #particle-canvas {
+        position: absolute;
+    }
+}
+
+/* =========================================
+   THE ORNATE FRAME
+   ========================================= */
+.frame-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    pointer-events: none; /* Let clicks pass through to content */
+    z-index: 50; /* Above background and canvas, above most content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    .frame-container {
+        position: absolute;
+    }
+}
+
+.ornate-frame {
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* Stretches to fill viewport. Adjust to cover or contain if distortion is too much, but user specified filling the screen */
+    /* The prompt says: "Never stretch it independently in a way that distorts the ornamentation."
+       So maybe we should use object-fit: cover or contain. Let's use cover and center it. */
+    object-fit: cover;
+    object-position: center;
+    filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+}
+
+/* =========================================
+   SCROLLABLE CONTENT
+   ========================================= */
+.scroll-content {
+    position: relative;
+    z-index: 10; /* Behind frame (50), in front of canvas (-2) */
+    width: 100%;
+    padding: 0 15%; /* Padding to keep content inside the transparent frame area */
+    padding-top: 15vh;
+    padding-bottom: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Increase padding for narrower screens to avoid frame overlay */
+@media (max-width: 380px) {
+    .scroll-content { padding: 0 18%; }
+}
+
+.chapter {
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10vh;
+    color: var(--color-champagne);
+}
+
+.content-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.mt-large {
+    margin-top: 4rem;
+}
+
+/* =========================================
+   TYPOGRAPHY & ELEMENTS
+   ========================================= */
+.couple-names {
+    font-family: var(--font-calligraphy);
+    color: var(--color-gold);
+    font-size: 3.5rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ampersand {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--color-gold-dark);
+    margin: 10px 0;
+    font-style: italic;
+}
+
+.section-title {
+    font-family: var(--font-calligraphy);
+    color: var(--color-gold);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: normal;
+}
+
+/* =========================================
+   CHAPTER 1: GANESH & WELCOME
+   ========================================= */
+.ganesh-image {
+    width: 120px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+}
+
+.shlok {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--color-gold-light);
+    margin-bottom: 2rem;
+}
+
+.welcome-message {
+    margin-top: 2rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-champagne);
+}
+
+/* =========================================
+   CHAPTER 2: DATE
+   ========================================= */
+.date-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--color-gold-dark);
+    padding: 2rem;
+    border-radius: 8px;
+    background: rgba(26, 24, 20, 0.5);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.date-display::before {
+    content: '';
+    position: absolute;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+}
+
+.day {
+    font-size: 4rem;
+    color: var(--color-gold);
+    font-weight: 600;
+    line-height: 1;
+}
+
+.month {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    margin: 10px 0;
+    color: var(--color-ivory);
+}
+
+.year {
+    font-size: 1.5rem;
+    color: var(--color-gold-light);
+    font-style: italic;
+}
+
+/* =========================================
+   CHAPTER 3: TIMELINE
+   ========================================= */
+.timeline {
+    position: relative;
+    width: 100%;
+    padding: 2rem 0;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--color-gold-dark), transparent);
+    transform: translateX(-50%);
+}
+
+.timeline-event {
+    position: relative;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-gold);
+}
+
+.event-dot.star {
+    width: 14px;
+    height: 14px;
+    background-color: var(--color-ivory);
+    box-shadow: 0 0 15px var(--color-ivory);
+}
+
+.event-content {
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
+    background: rgba(26, 24, 20, 0.7);
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 2;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.event-content h3 {
+    font-size: 1.3rem;
+    color: var(--color-gold-light);
+    margin-bottom: 5px;
+    font-family: var(--font-serif);
+    font-weight: 500;
+}
+
+.event-content p {
+    font-size: 0.9rem;
+    color: var(--color-champagne);
+    font-style: italic;
+}
+
+.wedding-event .event-content h3 {
+    font-size: 1.8rem;
+    color: var(--color-gold);
+    font-family: var(--font-calligraphy);
+}
+
+/* =========================================
+   CHAPTER 4: VENUE
+   ========================================= */
+.venue-details {
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.venue-details h3 {
+    color: var(--color-gold-light);
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.map-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: transparent;
+    color: var(--color-gold);
+    text-decoration: none;
+    border: 1px solid var(--color-gold);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.map-button:active {
+    background-color: rgba(212, 175, 55, 0.2);
+}
+
+/* =========================================
+   CHAPTER 5: THANK YOU
+   ========================================= */
+.thank-you-message {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    font-style: italic;
+}
+
+.closing-names {
+    font-size: 3rem;
+}
+
+.closing-ornament {
+    margin-top: 2rem;
+    color: var(--color-gold-dark);
+    font-size: 1.5rem;
+}
+
+.bottom-spacer {
+    height: 15vh; /* Ensure we can scroll past the bottom frame edge */
+}
+
+/* =========================================
+   ANIMATIONS (Intersection Observer classes)
+   ========================================= */
+.reveal-fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+.reveal-fade-up.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+.reveal-scale.active {
+    opacity: 1;
+    transform: scale(1);
+}
