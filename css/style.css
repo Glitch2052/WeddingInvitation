@@ -13,10 +13,8 @@
   --font-dev:'Noto Serif Devanagari',serif;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-snap-type:y mandatory;overflow-x:hidden;background:#2c1d10;scrollbar-width:none;-ms-overflow-style:none}
-html::-webkit-scrollbar{display:none;width:0;height:0}
-body{margin:0;width:100%;overflow-x:hidden;overscroll-behavior-x:none;background:#2c1d10;color:var(--ink);font-family:var(--font-body);font-size:18px;line-height:1.45;scrollbar-width:none;-ms-overflow-style:none}
-body::-webkit-scrollbar{display:none;width:0;height:0}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory;overflow-x:hidden;background:#2c1d10}
+body{margin:0;width:100%;overflow-x:hidden;overscroll-behavior-x:none;background:#2c1d10;color:var(--ink);font-family:var(--font-body);font-size:18px;line-height:1.45}
 button,a{font:inherit}
 button{cursor:pointer}
 
@@ -61,61 +59,13 @@ button{cursor:pointer}
 .page-venue::before{background-image:url('../images/backgrounds/venue-bg.png')}
 .page-thankyou::before{background-image:url('../images/backgrounds/thanks-bg.png')}
 
-/* =========================================================
-   MANUAL VIEWPORT MASK — LEFT / RIGHT ONLY
-   ---------------------------------------------------------
-   The background images remain FULL VIEWPORT and keep their
-   normal object-fit: cover behavior. This overlay simply
-   covers the outer left/right strips so the image is visible
-   only through the central frame area.
-
-   IMPORTANT: top and bottom are NEVER masked. This prevents
-   any artificial gap between the stacked invitation pages.
-
-   Adjust these two values manually while experimenting:
-     --mask-left: 28px;
-     --mask-right: 28px;
-
-   Set them to 0px to disable the mask completely.
-   ========================================================= */
-:root{
-  --mask-left:28px;
-  --mask-right:28px;
-  --mask-color:#17100a;
-}
-
-.frame-outer-mask{
-  position:fixed;
-  inset:0;
-  z-index:18;
-  pointer-events:none;
-}
-
-/* LEFT OUTER STRIP */
-.frame-outer-mask .mask-left{
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  width:var(--mask-left);
-  background:var(--mask-color);
-}
-
-/* RIGHT OUTER STRIP */
-.frame-outer-mask .mask-right{
-  position:absolute;
-  top:0;
-  bottom:0;
-  right:0;
-  width:var(--mask-right);
-  background:var(--mask-color);
-}
-
-/* Deliberately disabled: NO vertical masking. */
-.frame-outer-mask .mask-top,
-.frame-outer-mask .mask-bottom{
-  display:none;
-}
+/* Mask ONLY the left and right outer areas. The background remains full-height, so there is no
+   dark/empty gap between vertically stacked invitation pages. */
+.frame-outer-mask{position:fixed;inset:0;z-index:18;pointer-events:none;}
+.frame-outer-mask .mask-left,.frame-outer-mask .mask-right{position:absolute;top:0;bottom:0;width:var(--frame-inset-x);background:radial-gradient(circle at 50% 50%,#3a2815 0%,#24170d 72%,#17100a 100%);}
+.frame-outer-mask .mask-left{left:0;}
+.frame-outer-mask .mask-right{right:0;}
+.frame-outer-mask .mask-top,.frame-outer-mask .mask-bottom{display:none;}
 
 /* Frame: preserve the source artwork ratio and crop only its outermost sides on narrow screens. */
 .frame-overlay{position:fixed;z-index:20;inset:0;width:100vw;height:100svh;object-fit:cover;object-position:center;pointer-events:none;filter:drop-shadow(0 6px 16px rgba(51,30,11,.2))}
@@ -327,4 +277,68 @@ button{cursor:pointer}
   .shlok{font-size:13px}
   .shlok--verse{font-size:11.5px}
   .thanks-content{transform:translateY(-4vh)}
+}
+
+/* =========================================================
+   FRAME + MASK SHARED CONTAINER
+   ---------------------------------------------------------
+   The mask and frame now use the EXACT same responsive
+   container. Adjust --frame-mask-x as a percentage of that
+   container to align the left/right mask with the frame.
+
+   Top and bottom are intentionally never masked.
+   ========================================================= */
+:root {
+  --frame-mask-x: 7.5%;
+  --frame-mask-color: #17100a;
+}
+
+.frame-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100svh;
+  z-index: 18;
+  pointer-events: none;
+}
+
+.frame-container .frame-outer-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.frame-container .mask-left,
+.frame-container .mask-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--frame-mask-x);
+  background: var(--frame-mask-color);
+}
+
+.frame-container .mask-left { left: 0; }
+.frame-container .mask-right { right: 0; }
+
+.frame-container .frame-inner-shadow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 44px 14px rgba(58,34,14,.22),
+    inset 0 0 12px 3px rgba(255,250,235,.25);
+}
+
+.frame-container .frame-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 16px rgba(51,30,11,.2));
 }
