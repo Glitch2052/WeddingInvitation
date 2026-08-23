@@ -350,12 +350,21 @@ button{cursor:pointer}
    Without this layer, that extra space shows raw unmasked scrolling content. This element uses
    top/right/bottom/left:0 with no explicit height, so as a position:fixed box it is sized
    against the actual live viewport at all times (unlike a height:100svh/100vh box, which is
-   a fixed snapshot), and simply paints the same dark tone as the page backgrounds there. It
-   sits one layer below the frame mask/artwork so the frame itself never resizes or stretches. */
+   a fixed snapshot), and simply paints the same dark tone as the page backgrounds there.
+   IMPORTANT: this must be a SIBLING of .frame-container, not a child of it. .frame-container
+   is position:fixed with z-index:18, which makes it its own stacking context — a child inside
+   it with a negative z-index still paints as part of that context, i.e. still above #invite's
+   content, not behind it.
+   IMPORTANT #2: this must only cover the strip BELOW the frame's own 100svh box, not the whole
+   screen. top:100svh pins its start exactly where the frame box ends; bottom:0 pins its end to
+   the real/current viewport bottom (which grows as the toolbar hides). That makes its height
+   equal to (real viewport height − 100svh) — zero when the toolbar is fully shown, growing only
+   as it collapses. A full-screen version would sit right behind the mask's transparent window
+   too and blot out the invitation content everywhere, not just in the revealed gap. */
 .frame-viewport-guard{
   position:fixed;
-  top:0;right:0;bottom:0;left:0;
-  z-index:-1;
+  top:100svh;right:0;bottom:0;left:0;
+  z-index:17;
   background:#17100a;
   pointer-events:none;
 }
