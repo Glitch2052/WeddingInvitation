@@ -24,13 +24,33 @@ function initSound(){
   const audio=document.getElementById('bg-music');
   if(!btn||!audio)return;
   let playing=false;
+  // Tracks whether music was actually playing right before the tab/browser was hidden,
+  // so we only auto-resume for someone who had it on, not someone who'd muted it.
+  let resumeOnReturn=false;
   const update=()=>{
     btn.classList.toggle('paused',!playing);
     btn.setAttribute('aria-pressed',String(playing));
   };
   const play=()=>audio.play().then(()=>{playing=true;update()}).catch(()=>{playing=false;update()});
+  const pause=()=>{audio.pause();playing=false;update()};
   window.addEventListener('music:start',play,{once:true});
-  btn.addEventListener('click',()=>{ if(playing){audio.pause();playing=false;update()} else play(); });
+  btn.addEventListener('click',()=>{ if(playing){pause()} else play(); });
+
+  // Auto-mute when the tab/app is backgrounded, the browser is minimized, or the user
+  // navigates away or closes the tab. There's no JS event that fires reliably "on browser
+  // close" specifically, so Page Visibility (fires on tab switch, app backgrounding, screen
+  // lock, and just before close/navigation on mobile) plus pagehide (back/forward-cache and
+  // actual unload) together cover every case that matters in practice.
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+      if(playing){ resumeOnReturn=true; pause(); }
+    } else if(resumeOnReturn){
+      resumeOnReturn=false;
+      play();
+    }
+  });
+  window.addEventListener('pagehide',()=>{ if(playing) pause(); });
+
   update();
 }
 

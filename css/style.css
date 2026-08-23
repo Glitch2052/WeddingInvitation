@@ -343,6 +343,23 @@ button{cursor:pointer}
   filter: drop-shadow(0 6px 16px rgba(51,30,11,.2));
 }
 
+/* Viewport safety guard: fills the REAL current viewport (not the svh snapshot the frame
+   is sized to). On Chrome/Safari mobile, 100svh locks to the toolbar-visible viewport size so
+   the frame graphic never stretches/jumps as the URL bar hides — but that also means when the
+   toolbar collapses, extra space is revealed below the frame that 100svh never accounted for.
+   Without this layer, that extra space shows raw unmasked scrolling content. This element uses
+   top/right/bottom/left:0 with no explicit height, so as a position:fixed box it is sized
+   against the actual live viewport at all times (unlike a height:100svh/100vh box, which is
+   a fixed snapshot), and simply paints the same dark tone as the page backgrounds there. It
+   sits one layer below the frame mask/artwork so the frame itself never resizes or stretches. */
+.frame-viewport-guard{
+  position:fixed;
+  top:0;right:0;bottom:0;left:0;
+  z-index:-1;
+  background:#17100a;
+  pointer-events:none;
+}
+
 /* Full-frame background mask: same source dimensions and same cover geometry as frame.png. */
 .frame-container .frame-mask{
   position:absolute;
