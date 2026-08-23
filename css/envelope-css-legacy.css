@@ -1,0 +1,170 @@
+/* =========================================================
+   Legacy CSS-3D envelope styles — only needed by index-css.html.
+   Not loaded by the live index.html (video version), which has
+   its own minimal envelope styles inline in css/style.css.
+   ========================================================= */
+.envelope-stage{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  perspective: 1600px;
+}
+.envelope{
+  position: relative;
+  width: min(88vw, 420px);
+  height: min(62vw, 290px);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.env-img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.env-back,
+.env-front{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, #55663f, #3c4a2c);
+  border-radius: 4px;
+  box-shadow: 0 30px 60px rgba(0,0,0,.45);
+  overflow: hidden;
+}
+.env-front{
+  clip-path: polygon(0 100%, 50% 42%, 100% 100%);
+  background: linear-gradient(160deg, #607249, #414f30);
+  z-index: 3;
+}
+.env-card{
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 8%;
+  height: 82%;
+  background: var(--cream);
+  border-radius: 2px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px 10px;
+  overflow: hidden;
+}
+.env-card__texture{ opacity: .5; z-index: -1; }
+.env-card__eyebrow{
+  margin:0;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.env-card__names{
+  margin: 2px 0;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 5vw, 26px);
+  color: var(--olive-deep);
+}
+.env-card__names .amp{
+  font-family: var(--font-script);
+  color: var(--gold);
+  padding: 0 4px;
+}
+.env-card__date{
+  margin:0;
+  font-size: 13px;
+  letter-spacing: .15em;
+  color: var(--olive);
+}
+.env-flap{
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 58%;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transform-style: preserve-3d;
+  z-index: 4;
+}
+.env-flap__face{
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  backface-visibility: hidden;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+}
+.env-flap__face--front{
+  background: linear-gradient(200deg, #63754a, #465532);
+}
+.env-flap__face--back{
+  background: linear-gradient(200deg, #d8cfb4, #c7bb98);
+  transform: rotateX(180deg);
+}
+.seal{
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 72px;
+  height: 72px;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  border: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fbf8f0, var(--wax) 55%, #ddd4bd 100%);
+  box-shadow: 0 6px 14px rgba(0,0,0,.4), inset 0 0 0 2px rgba(184,147,90,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .3s ease;
+  overflow: visible;
+}
+.seal:hover{ transform: translate(-50%, -50%) scale(1.06); }
+.seal__glow{
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(211,184,136,.55), transparent 70%);
+  z-index: -1;
+  animation: sealGlow 2.6s ease-in-out infinite;
+}
+@keyframes sealGlow{
+  0%,100%{ transform: scale(.9); opacity: .6; }
+  50%{ transform: scale(1.25); opacity: 1; }
+}
+.seal__img{ border-radius: 50%; z-index: 0; }
+.seal__ring{
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(74,90,58,.35);
+}
+.seal__initials{
+  position: relative;
+  font-family: var(--font-display);
+  letter-spacing: .1em;
+  font-size: 15px;
+  color: var(--olive-deep);
+}
+
+/* Three.js variant extras */
+#three-canvas{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+#envelope-screen:has(#three-canvas) .tap-hint{
+  position: absolute;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+}

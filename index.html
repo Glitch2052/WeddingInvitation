@@ -1,204 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Nikita & Kamlesh | Wedding Invitation</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Nikita &amp; Kamlesh — 24th November 2026</title>
+<meta name="description" content="Join us as we celebrate the wedding of Nikita &amp; Kamlesh — 24th November 2026, Ankleshwar, Gujarat.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+SC:wght@500;600&family=Meddon&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Audio Element -->
-    <audio id="wedding-audio" loop>
-        <source src="audio/wedding_song.mp3" type="audio/mpeg">
-    </audio>
+<!-- ============ ENVELOPE INTRO (video) ============ -->
+<div id="envelope-screen">
+  <video
+    id="envelope-video"
+    src="video/envelope-open.mp4"
+    poster="video/envelope-poster.jpg"
+    playsinline
+    webkit-playsinline="true"
+    preload="auto"
+    muted
+  ></video>
 
-    <!-- Music Control -->
-    <div id="music-toggle" class="music-toggle hidden">
-        <svg id="music-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-        </svg>
-        <svg id="music-icon-off" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-            <line x1="1" y1="1" x2="23" y2="23"></line>
-        </svg>
+  <!-- Kept as its own layer (not just the <video poster> attribute)
+       because some mobile browsers drop the poster the instant
+       play() is called, before a real frame is ready — showing a
+       black flash. We hide this manually once playback has
+       genuinely started rendering frames (see js/envelope-video.js). -->
+  <img id="envelope-poster-img" src="video/envelope-poster.jpg" alt="" class="envelope-poster-img">
+
+  <p class="tap-hint" id="tap-hint">tap the seal to open</p>
+  <button type="button" id="seal-hit" class="seal-hit" aria-label="Open your invitation"></button>
+
+  <!-- Grows from the seal's position to cover the screen once the
+       video ends, then fades to reveal the invitation. Purely
+       visual — see js/envelope-video.js for the animation. -->
+  <div class="reveal-glow" id="reveal-glow" aria-hidden="true"></div>
+</div>
+
+<!-- ============ MAIN INVITATION ============ -->
+<main id="invite" aria-hidden="true">
+
+  <!-- sound toggle -->
+  <button type="button" id="sound-toggle" class="sound-toggle" aria-label="Toggle music">
+    <span class="sound-toggle__bars"><i></i><i></i><i></i></span>
+  </button>
+
+  <!-- drifting petals, follows the whole page, sits BELOW the frame -->
+  <div class="petal-field petal-field--site" id="petal-field-site" aria-hidden="true"></div>
+
+  <div class="frame-inner-shadow" aria-hidden="true"></div>
+
+  <!-- The ornate frame — a single constant overlay across the entire
+       invitation (not repeated per page). Fixed to the viewport, so
+       it never moves as the pages scroll behind/through it. Sits
+       above the falling petals, below nothing. -->
+  <img class="frame-overlay" src="images/frame.png" alt="" aria-hidden="true">
+
+  <!-- ============ PAGE 1 — GANESH & WELCOME ============ -->
+  <section class="section framed-section" id="page-welcome">
+    <div class="leaf leaf--tl" aria-hidden="true"></div>
+    <div class="leaf leaf--br" aria-hidden="true"></div>
+    <div class="parallax-layer parallax-layer--back" aria-hidden="true">
+      <img src="images/particles/flower-3.png" alt="" onerror="this.remove()">
+      <img src="images/particles/flower.png" alt="" onerror="this.remove()">
+    </div>
+    <div class="parallax-layer parallax-layer--front" aria-hidden="true">
+      <img src="images/particles/flower-2.png" alt="" onerror="this.remove()">
+      <img src="images/particles/flower-3.png" alt="" onerror="this.remove()">
     </div>
 
-    <!-- Envelope Screen -->
-    <section id="envelope-screen">
-        <div class="video-container">
-            <video id="envelope-video" playsinline webkit-playsinline preload="auto" poster="video/envelope-poster.jpg">
-                <source src="video/envelope-open.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div id="tap-to-reveal" class="tap-hint">
-            <span>Tap to reveal</span>
-        </div>
-    </section>
+    <div class="framed-card__content framed-card__content--welcome">
+      <img class="ganesh-mark reveal" src="images/ganesha.png" alt="Lord Ganesha">
 
-    <!-- Main Invitation Experience -->
-    <main id="invitation-container" class="hidden">
-        
-        <!-- Persistent Background Layer -->
-        <div class="invitation-bg"></div>
+      <p class="shlok reveal">&#2404; &#2358;&#2381;&#2352;&#2368; &#2327;&#2339;&#2375;&#2358;&#2366;&#2351; &#2344;&#2350;&#2307; &#2404;</p>
+      <p class="shlok shlok--verse reveal">
+        &#2357;&#2325;&#2381;&#2352;&#2340;&#2369;&#2339;&#2381;&#2337; &#2350;&#2361;&#2366;&#2325;&#2366;&#2351; &#2360;&#2370;&#2352;&#2381;&#2351;&#2325;&#2379;&#2335;&#2367; &#2360;&#2350;&#2346;&#2381;&#2352;&#2349; &#2404;<br>
+        &#2344;&#2367;&#2352;&#2381;&#2357;&#2367;&#2328;&#2381;&#2344;&#2306; &#2325;&#2369;&#2352;&#2369; &#2350;&#2375; &#2342;&#2375;&#2357; &#2360;&#2352;&#2381;&#2357;&#2325;&#2366;&#2352;&#2381;&#2351;&#2375;&#2359;&#2369; &#2360;&#2352;&#2381;&#2357;&#2342;&#2366; &#2404;&#2404;
+      </p>
 
-        <!-- Canvas for Particles (Background/Midground) -->
-        <canvas id="particle-canvas"></canvas>
+      <p class="fc-eyebrow reveal">together with their families</p>
+      <h1 class="fc-name reveal">Nikita</h1>
+      <p class="fc-amp reveal">&amp;</p>
+      <h1 class="fc-name reveal">Kamlesh</h1>
 
-        <!-- Persistent Foreground Frame -->
-        <div class="frame-container">
-            <img src="Images/Frame.png" alt="Decorative Frame" class="ornate-frame">
-        </div>
+      <p class="welcome-text reveal">
+        With hearts full of gratitude and joy, we — Nikita and Kamlesh,
+        together with our families — invite you to be part of the
+        beginning of our forever. Your presence, blessings, and love
+        would make our celebration complete.
+      </p>
+    </div>
 
-        <!-- Scrollable Content -->
-        <div class="scroll-content">
-            
-            <!-- CHAPTER 1: GANESH & WELCOME -->
-            <section class="chapter chapter-1">
-                <div class="content-block reveal-fade-up ganesh-section">
-                    <img src="Images/ganesh_image.png" alt="Lord Ganesha" class="ganesh-image">
-                    
-                    <div class="shlok">
-                        <p>॥ श्री गणेशाय नमः ॥</p>
-                        <p>वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।</p>
-                        <p>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
-                    </div>
-                </div>
+    <div class="scroll-cue reveal" aria-hidden="true"><span></span></div>
+  </section>
 
-                <div class="content-block reveal-fade-up mt-large names-section">
-                    <h1 class="couple-names">
-                        <span class="name">Nikita</span>
-                        <span class="ampersand">&</span>
-                        <span class="name">Kamlesh</span>
-                    </h1>
-                    
-                    <div class="welcome-message">
-                        <p>Joyfully invite you to share in their</p>
-                        <p>happiness as they unite in marriage.</p>
-                        <p>Together with their families, they request</p>
-                        <p>the honor of your presence to celebrate</p>
-                        <p>this auspicious beginning.</p>
-                    </div>
-                </div>
-            </section>
+  <!-- ============ PAGE 2 — WEDDING DATE ============ -->
+  <section class="section framed-section" id="page-date">
+    <div class="framed-card__content">
+      <p class="fc-eyebrow reveal">the wedding</p>
+      <p class="date-hero__day reveal">24</p>
+      <p class="date-hero__month reveal">November</p>
+      <p class="date-hero__year reveal">2026</p>
+      <div class="fc-rule reveal" aria-hidden="true"></div>
+      <div class="countdown reveal" id="countdown">
+        <div class="countdown__unit"><span id="cd-days">00</span><small>days</small></div>
+        <div class="countdown__unit"><span id="cd-hours">00</span><small>hours</small></div>
+        <div class="countdown__unit"><span id="cd-mins">00</span><small>minutes</small></div>
+        <div class="countdown__unit"><span id="cd-secs">00</span><small>seconds</small></div>
+      </div>
+    </div>
+  </section>
 
-            <!-- CHAPTER 2: WEDDING DATE -->
-            <section class="chapter chapter-2">
-                <div class="content-block reveal-scale">
-                    <h2 class="section-title">Save the Date</h2>
-                    <div class="date-display">
-                        <span class="day">24</span>
-                        <span class="month">NOVEMBER</span>
-                        <span class="year">2026</span>
-                    </div>
-                    <!-- Dedicated container for celebratory animation -->
-                    <div id="celebration-burst" class="celebration-container"></div>
-                </div>
-            </section>
+  <!-- ============ PAGE 3 — WEDDING FUNCTIONS ============ -->
+  <section class="section framed-section framed-section--wide functions-section" id="page-functions">
+    <div class="framed-card__content framed-card__content--wide functions-content">
+      <p class="fc-eyebrow reveal">the celebrations</p>
+      <h2 class="fc-title reveal functions-title">Wedding Events</h2>
+      <p class="functions-subtitle reveal">A celebration of love and tradition</p>
 
-            <!-- CHAPTER 3: FUNCTIONS TIMELINE -->
-            <section class="chapter chapter-3">
-                <div class="content-block">
-                    <h2 class="section-title reveal-fade-up">The Celebrations</h2>
-                    
-                    <div class="timeline">
-                        <div class="timeline-line"></div>
-                        
-                        <div class="timeline-event reveal-fade-up">
-                            <div class="event-dot"></div>
-                            <div class="event-content">
-                                <h3>Paath</h3>
-                                <p>20 November</p>
-                            </div>
-                        </div>
-                        
-                        <div class="timeline-event reveal-fade-up">
-                            <div class="event-dot"></div>
-                            <div class="event-content">
-                                <h3>Haldi</h3>
-                                <p>21 November</p>
-                            </div>
-                        </div>
-                        
-                        <div class="timeline-event reveal-fade-up">
-                            <div class="event-dot"></div>
-                            <div class="event-content">
-                                <h3>Sangeet</h3>
-                                <p>22 November</p>
-                            </div>
-                        </div>
-                        
-                        <div class="timeline-event reveal-fade-up">
-                            <div class="event-dot"></div>
-                            <div class="event-content">
-                                <h3>Reception</h3>
-                                <p>24 November</p>
-                            </div>
-                        </div>
-                        
-                        <div class="timeline-event wedding-event reveal-scale">
-                            <div class="event-dot star"></div>
-                            <div class="event-content">
-                                <h3>Wedding</h3>
-                                <p>24 November</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      <div class="wedding-timeline" id="wedding-timeline">
+        <div class="wedding-timeline__line" aria-hidden="true"><span></span></div>
 
-            <!-- CHAPTER 4: VENUE -->
-            <section class="chapter chapter-4">
-                <div class="content-block reveal-fade-up">
-                    <h2 class="section-title">The Venue</h2>
-                    
-                    <div class="venue-details">
-                        <h3>Shree Saurashtra Kadva Patidar<br>Seva Samaj</h3>
-                        <p>H-3214/C, Phase 4, Ankleshwar GIDC,<br>Ankleshwar, Dist. Bharuch,<br>Gujarat 393002</p>
-                    </div>
-                    
-                    <a href="https://maps.app.goo.gl/PWEFBNG33pPRfVGn9" target="_blank" class="map-button">
-                        View on Google Maps
-                    </a>
-                </div>
-            </section>
+        <article class="event-row event-row--left" data-event="paath">
+          <div class="event-block event-block--info reveal">
+            <p class="event-name">Paath</p>
+            <p class="event-date">20 November</p>
+            <p class="event-location"><span class="event-location__pin">⌖</span> Khinwara, Rajasthan</p>
+          </div>
+          <span class="event-node" aria-hidden="true"><i>✦</i></span>
+          <div class="event-block event-block--story reveal">
+            <span class="event-icon">ॐ</span>
+            <p>With blessings and prayers, the celebrations begin.</p>
+          </div>
+        </article>
 
-            <!-- CHAPTER 5: THANK YOU -->
-            <section class="chapter chapter-5">
-                <div class="content-block reveal-fade-up">
-                    <div class="thank-you-message">
-                        <p>With joy in our hearts,</p>
-                        <p>we look forward to celebrating</p>
-                        <p>this special day with you.</p>
-                    </div>
-                    
-                    <h1 class="couple-names closing-names">
-                        <span class="name">Nikita</span>
-                        <span class="ampersand">&</span>
-                        <span class="name">Kamlesh</span>
-                    </h1>
-                    
-                    <div class="closing-ornament">
-                        <span>✧</span>
-                    </div>
-                </div>
-                
-                <!-- Bottom padding to ensure content clears frame bottom edge -->
-                <div class="bottom-spacer"></div>
-            </section>
+        <article class="event-row event-row--right" data-event="haldi">
+          <div class="event-block event-block--story reveal">
+            <span class="event-icon">✦</span>
+            <p>A joyful beginning painted in sunshine, flowers and love.</p>
+          </div>
+          <span class="event-node" aria-hidden="true"><i>✦</i></span>
+          <div class="event-block event-block--info reveal">
+            <p class="event-name">Haldi</p>
+            <p class="event-date">21 November</p>
+            <p class="event-location"><span class="event-location__pin">⌖</span> Khinwara, Rajasthan</p>
+          </div>
+        </article>
 
-        </div>
-    </main>
+        <article class="event-row event-row--left" data-event="sangeet">
+          <div class="event-block event-block--info reveal">
+            <p class="event-name">Sangeet</p>
+            <p class="event-date">22 November</p>
+            <p class="event-location"><span class="event-location__pin">⌖</span> Khinwara, Rajasthan</p>
+          </div>
+          <span class="event-node" aria-hidden="true"><i>✦</i></span>
+          <div class="event-block event-block--story reveal">
+            <span class="event-icon">♫</span>
+            <p>An evening of music, laughter, dance and celebration.</p>
+          </div>
+        </article>
 
-    <script src="script.js"></script>
+        <article class="event-row event-row--right event-row--final" data-event="reception-pheras">
+          <div class="event-block event-block--story reveal">
+            <span class="event-icon">♡</span>
+            <p>Where celebration meets sacred vows and two families become one.</p>
+          </div>
+          <span class="event-node event-node--final" aria-hidden="true"><i>♥</i></span>
+          <div class="event-block event-block--info event-block--final-info reveal">
+            <p class="event-name">Reception &amp; Pheras</p>
+            <p class="event-date">24 November</p>
+            <p class="event-location"><span class="event-location__pin">⌖</span> Ankleshwar, Gujarat</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 4 — VENUE ============ -->
+  <section class="section framed-section" id="page-venue">
+    <div class="framed-card__content">
+      <p class="fc-eyebrow reveal">the venue</p>
+
+      <!-- Live map preview — no API key needed for this basic embed. -->
+      <div class="map-embed reveal">
+        <iframe
+          src="https://www.google.com/maps?q=Shree+Saurashtra+Kadva+Patidar+Seva+Samaj+Ankleshwar+GIDC+Ankleshwar+Gujarat+393002&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Map preview of the venue"
+        ></iframe>
+      </div>
+
+      <h2 class="fc-title reveal">Shree Saurashtra<br>Kadva Patidar Seva Samaj</h2>
+      <p class="venue-address reveal">
+        H-3214/C, Phase 4, Ankleshwar GIDC,<br>
+        Ankleshwar, Dist. Bharuch,<br>
+        Gujarat 393002
+      </p>
+      <a class="btn reveal" href="https://maps.app.goo.gl/PWEFBNG33pPRfVGn9" target="_blank" rel="noopener">View on Google Maps</a>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 5 — THANK YOU ============ -->
+  <footer class="section framed-section" id="page-thankyou">
+    <div class="framed-card__content">
+      <p class="fc-eyebrow reveal">with love</p>
+      <p class="welcome-text reveal">
+        Thank you for being such an important part of our journey.
+        Your love, blessings, and presence mean the world to us as we
+        begin this beautiful new chapter together.
+      </p>
+      <div class="fc-rule reveal" aria-hidden="true"></div>
+      <h1 class="fc-name reveal">Nikita</h1>
+      <p class="fc-amp reveal">&amp;</p>
+      <h1 class="fc-name reveal">Kamlesh</h1>
+    </div>
+  </footer>
+
+</main>
+
+<audio id="bg-music" loop preload="none">
+  <source src="audio/wedding_song.mp3" type="audio/mpeg">
+</audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/envelope-video.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
