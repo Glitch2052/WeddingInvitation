@@ -24,10 +24,29 @@
   const preventTouch=e=>e.preventDefault();
   lock();
 
+  // Everything except the envelope video + poster is held back until the seal is tapped, so it
+  // never competes with the video for bandwidth on first paint. Arming here (rather than on a
+  // video event like 'playing') starts the downloads at the earliest possible moment — the full
+  // duration of the video playback becomes the head start these assets get to finish loading
+  // before reveal() runs.
+  let assetsArmed=false;
+  function armDeferredAssets(){
+    if(assetsArmed)return;
+    assetsArmed=true;
+    document.body.classList.add('assets-armed'); // unlocks the 5 section background-image url()s in CSS
+    document.querySelectorAll('.deferred-img').forEach((img)=>{
+      const src=img.getAttribute('data-src');
+      if(src){ img.src=src; img.removeAttribute('data-src'); }
+    });
+    const bgMusic=document.getElementById('bg-music');
+    if(bgMusic) bgMusic.load(); // preload stays "none" in HTML; this explicitly starts the fetch now
+  }
+
   function play(){
     if(opened)return;
     opened=true;
     screenEl.classList.add('playing');
+    armDeferredAssets();
     video.volume=1;
     video.muted=false;
     video.play().catch(()=>{video.muted=true;video.play().catch(()=>{})});

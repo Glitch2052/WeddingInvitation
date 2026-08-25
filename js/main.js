@@ -2,9 +2,9 @@
 gsap.registerPlugin(ScrollTrigger);
 
 const PETAL_IMAGE_CANDIDATES = [
-  'images/particles/flower.png',
-  'images/particles/flower-2.png',
-  'images/particles/flower-3.png'
+  'images/particles/flower.webp',
+  'images/particles/flower-2.webp',
+  'images/particles/flower-3.webp'
 ];
 const failedPetalImages = new Set();
 

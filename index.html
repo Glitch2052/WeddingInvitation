@@ -14,8 +14,8 @@
 
 <!-- Opening envelope -->
 <div id="envelope-screen" aria-label="Wedding invitation opening">
-  <video id="envelope-video" src="video/envelope-open.mp4" poster="video/envelope-poster.jpg" playsinline webkit-playsinline="true" preload="auto" muted></video>
-  <img id="envelope-poster-img" src="video/envelope-poster.jpg" alt="" class="envelope-poster-img">
+  <video id="envelope-video" src="video/envelope-open.mp4" poster="video/envelope-poster.webp" playsinline webkit-playsinline="true" preload="auto" muted></video>
+  <img id="envelope-poster-img" src="video/envelope-poster.webp" alt="" class="envelope-poster-img">
   <div class="seal-prompt" aria-hidden="true">Tap the seal to open</div>
   <button type="button" id="seal-hit" class="seal-hit" aria-label="Open your invitation"></button>
   <div class="reveal-glow" id="reveal-glow" aria-hidden="true"></div>
@@ -30,9 +30,9 @@
   <div class="petal-field petal-field--site" id="petal-field-site" aria-hidden="true"></div>
   <div class="frame-viewport-guard" aria-hidden="true"></div>
   <div class="frame-container" aria-hidden="true">
-    <img class="frame-mask" src="images/frame-mask.png" alt="">
+    <img class="frame-mask deferred-img" data-src="images/frame-mask.png" alt="">
     <div class="frame-inner-shadow"></div>
-    <img class="frame-overlay" src="images/frame.png" alt="">
+    <img class="frame-overlay deferred-img" data-src="images/frame.webp" alt="">
   </div>
 
   <!-- PAGE 1 -->
@@ -40,7 +40,7 @@
     <div class="page-wash" aria-hidden="true"></div>
     <div class="welcome-content page-content">
       <div class="welcome-blessing">
-        <img class="ganesh-mark reveal" src="images/ganesha.png" alt="Lord Ganesha">
+        <img class="ganesh-mark reveal deferred-img" data-src="images/ganesha.webp" alt="Lord Ganesha">
         <p class="shlok reveal">॥ श्री गणेशाय नमः ॥</p>
         <p class="shlok shlok--verse reveal">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
         <div class="gold-divider reveal" aria-hidden="true"><span></span><i>✦</i><span></span></div>
@@ -127,7 +127,7 @@
       <h2 class="page-title reveal">A Place to Celebrate</h2>
       <div class="gold-divider reveal" aria-hidden="true"><span></span><i>✦</i><span></span></div>
       <div class="venue-photo reveal">
-        <img src="images/mandap.png" alt="Wedding mandap design surrounded by flowers and palace gardens">
+        <img class="deferred-img" data-src="images/mandap.webp" alt="Wedding mandap design surrounded by flowers and palace gardens">
       </div>
       <h3 class="venue-name reveal">Shree Saurashtra<br>Kadva Patidar Seva Samaj</h3>
       <p class="venue-address reveal">H-3214/C, Phase 4, Ankleshwar GIDC,<br>Ankleshwar, Dist. Bharuch,<br>Gujarat 393002</p>

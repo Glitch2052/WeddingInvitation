@@ -53,11 +53,15 @@ button{cursor:pointer}
 }
 .page-wash--light{background:linear-gradient(180deg,rgba(255,250,240,.28),rgba(255,249,237,.45))}
 .page-wash--soft{background:linear-gradient(180deg,rgba(255,249,237,.38),rgba(255,249,237,.5))}
-.page-welcome::before{background-image:url('../images/backgrounds/welcome-bg.png')}
-.page-date::before{background-image:url('../images/backgrounds/date-bg.png')}
-.page-events::before{background-image:url('../images/backgrounds/events-bg.png')}
-.page-venue::before{background-image:url('../images/backgrounds/venue-bg.png')}
-.page-thankyou::before{background-image:url('../images/backgrounds/thanks-bg.png')}
+/* Section backgrounds are NOT loaded on initial paint. #invite is only visibility:hidden (not
+   display:none), so the browser would otherwise start fetching all five of these the moment the
+   stylesheet is parsed — competing with the envelope video. Gating the url() behind a class that
+   JS adds once the envelope video starts playing means these downloads begin then instead. */
+body.assets-armed .page-welcome::before{background-image:url('../images/backgrounds/welcome-bg.webp')}
+body.assets-armed .page-date::before{background-image:url('../images/backgrounds/date-bg.webp')}
+body.assets-armed .page-events::before{background-image:url('../images/backgrounds/events-bg.webp')}
+body.assets-armed .page-venue::before{background-image:url('../images/backgrounds/venue-bg.webp')}
+body.assets-armed .page-thankyou::before{background-image:url('../images/backgrounds/thanks-bg.webp')}
 
 /* Mask ONLY the left and right outer areas. The background remains full-height, so there is no
    dark/empty gap between vertically stacked invitation pages. */
