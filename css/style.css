@@ -512,7 +512,7 @@ button{cursor:pointer}
 }
 .couple-figure--groom{
   z-index:1; /* groom behind the bride */
-  height:clamp(115px,30vw,255px);
+  height:clamp(115px,32vw,255px);
   transform:translateX(-50%) translateX(70vw);
 }
 .couple-burst{
