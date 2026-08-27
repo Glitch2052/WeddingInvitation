@@ -1,21 +1,17 @@
 # images/particles/
 
-Three daisy flower images are already included here:
+Seven rose-petal / flower images are included here, used as the falling
+particles across the invitation:
 
-- `flower.png` (cream/white)
-- `flower-2.png` (pink)
-- `flower-3.png` (purple)
+- `flower.webp`
+- `flower-2.webp`
+- `flower-3.webp`
+- `flower-4.webp`
+- `flower-5.webp`
+- `flower-6.webp`
+- `flower-7.webp`
 
-These fall alongside the CSS-drawn petal shapes once the invitation
-loads. Each falling piece randomly picks one of the images below
-that actually exists — you can add or remove any of them freely:
+Each falling piece randomly picks one of these images. They're referenced
+in `js/main.js` via the `PETAL_IMAGE_CANDIDATES` array — add, remove, or
+rename files there if you change the set.
 
-| File            |
-|------------------|
-| `petal.png`      |
-| `petal-2.png`    |
-| `flower.png`     |
-| `flower-2.png`    |
-| `flower-3.png`    |
-
-No code changes needed — just replace or add files with these names.
