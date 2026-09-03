@@ -27,6 +27,14 @@ function initCoupleOverlay(){
   const END_VW=14;
   const MEET_AT=0.985; // scroll progress (0-1) at which the burst fires, once
 
+  // All 5 pages are equal height (100vh each), so one page = exactly 0.25 of
+  // the scrollable range. EARLY_SHIFT controls how much sooner the approach
+  // becomes noticeable — see the rescaling in update() below, which stretches
+  // the whole 0→1 curve back over the full scroll range so the figures still
+  // only reach their final (closest) position exactly at the very end of the
+  // last page, rather than arriving early and then sitting static.
+  const EARLY_SHIFT=0.25;
+
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function place(progress){
@@ -50,7 +58,13 @@ function initCoupleOverlay(){
   function update(){
     ticking=false;
     const max=document.documentElement.scrollHeight-window.innerHeight;
-    const progress=max>0?Math.min(1,Math.max(0,window.scrollY/max)):0;
+    const rawProgress=max>0?Math.min(1,Math.max(0,window.scrollY/max)):0;
+    // Rescale (not clamp) the shifted value back onto [0,1]: raw=0 still maps
+    // to a bit above 0, but raw=1 always maps to exactly 1, so the figures
+    // keep gradually closing the gap all the way through and only reach their
+    // final resting position right as the last page finishes scrolling into
+    // view — never before.
+    const progress=Math.min(1,(rawProgress+EARLY_SHIFT)/(1+EARLY_SHIFT));
     const t=place(progress);
     if(!burstFired && t>=MEET_AT){
       burstFired=true;

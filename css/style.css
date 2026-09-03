@@ -127,23 +127,28 @@ button{cursor:pointer}
 .script-amp{margin:-2px 0;font-family:var(--font-name);font-size:clamp(22px,5vw,30px);color:var(--gold);line-height:1}
 .welcome-copy{margin:12px auto 0;font-size:clamp(12px,3.1vw,15px);line-height:1.55;color:#5c4634}
 .wedding-hashtag{margin:14px auto 0;display:inline-block;padding:6px 16px;border:1px solid rgba(155,113,55,.5);border-radius:999px;font-family:var(--font-display);font-size:clamp(10px,2.6vw,13px);letter-spacing:.1em;color:var(--gold);background:rgba(255,249,237,.35)}
-.scroll-cue{position:absolute;z-index:4;bottom:max(74px,calc(env(safe-area-inset-bottom) + 52px));left:50%;transform:translateX(-50%);width:30px;height:18px;opacity:1}
-.scroll-arrow{display:block;width:100%;height:100%;overflow:visible;animation:sineFloat 2.6s ease-in-out infinite}
-.scroll-arrow path{fill:none;stroke:var(--gold-light);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 2px 3px rgba(63,38,17,.3))}
-/* Vertical offsets below are amplitude * sin(angle) sampled every 10% of the cycle,
-   so the arrow genuinely bobs on a sine curve rather than a simple ease back-and-forth. */
-@keyframes sineFloat{
+.scroll-cue{position:absolute;z-index:4;bottom:max(74px,calc(env(safe-area-inset-bottom) + 52px));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;opacity:1}
+.scroll-arrow{display:block;width:30px;height:28px;overflow:visible;animation:arrowBounce 1.9s cubic-bezier(.45,0,.2,1) infinite}
+.scroll-arrow-chevron{fill:none;stroke:var(--gold);stroke-width:2.9;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 2px 3px rgba(63,38,17,.3))}
+.scroll-arrow-chevron--bottom{opacity:.55}
+/* A gentle bounce rather than a symmetric float: quick dip, soft settle, small
+   second dip — reads as "bounce" instead of the previous pure sine sway. */
+@keyframes arrowBounce{
   0%{transform:translateY(0)}
-  10%{transform:translateY(4.7px)}
-  20%{transform:translateY(7.6px)}
-  30%{transform:translateY(7.6px)}
-  40%{transform:translateY(4.7px)}
+  28%{transform:translateY(7px)}
   50%{transform:translateY(0)}
-  60%{transform:translateY(-4.7px)}
-  70%{transform:translateY(-7.6px)}
-  80%{transform:translateY(-7.6px)}
-  90%{transform:translateY(-4.7px)}
+  72%{transform:translateY(3px)}
   100%{transform:translateY(0)}
+}
+
+/* Swipe-up hint: the moving dot fades as it travels upward. */
+   looping alongside the arrow bounce to reinforce "drag/swipe up here". */
+.swipe-hint{position:relative;width:16px;height:32px;transform:translateX(7px)}
+.swipe-hint-dot{position:absolute;left:50%;bottom:0;width:12px;height:12px;border-radius:50%;background:var(--gold);transform:translateX(-50%);box-shadow:0 2px 4px rgba(63,38,17,.35);animation:swipeDrag 1.25s cubic-bezier(.45,0,.2,1) infinite}
+@keyframes swipeDrag{
+  0%{transform:translate(-50%,0);opacity:1}
+  65%{opacity:.15}
+  100%{transform:translate(-50%,-22px);opacity:0}
 }
 
 /* Page 2 */
@@ -491,6 +496,13 @@ button{cursor:pointer}
   z-index:18;
   pointer-events:none;
   overflow:hidden;
+  /* Shared base height — bride uses this directly, groom scales off it via
+     --groom-scale below. Change this to resize both figures at once. */
+  --figure-height:clamp(108px,26vw,240px);
+  /* How much taller the groom stands than the bride, as a multiple of
+     --figure-height. 1 = identical height. 1.08 = 8% taller. This is the one
+     number to adjust to taste. */
+  --groom-scale:1.08;
 }
 .couple-figure{
   position:absolute;
@@ -499,8 +511,8 @@ button{cursor:pointer}
   /* Scale by HEIGHT, not width. Both source images are 1024px tall but different
      widths (groom's canvas is narrower/more cropped than bride's), so sizing by
      width made the groom render much taller. Height-based scaling keeps both
-     figures the same visual height regardless of their source aspect ratio. */
-  height:clamp(108px,26vw,240px);
+     figures matched off the same --figure-height instead. */
+  height:var(--figure-height);
   width:auto;
   will-change:transform;
   filter:drop-shadow(0 10px 16px rgba(60,30,10,.28));
@@ -512,7 +524,7 @@ button{cursor:pointer}
 }
 .couple-figure--groom{
   z-index:1; /* groom behind the bride */
-  height:clamp(115px,32vw,255px);
+  height:calc(var(--figure-height) * var(--groom-scale));
   transform:translateX(-50%) translateX(70vw);
 }
 .couple-burst{
@@ -533,5 +545,5 @@ button{cursor:pointer}
   background:radial-gradient(circle,#fffaf0 0%,#f3d9a0 55%,rgba(243,217,160,0) 78%);
 }
 @media (max-width:520px){
-  .couple-figure{height:clamp(96px,30vw,175px)}
+  .couple-overlay{--figure-height:clamp(96px,30vw,175px)}
 }
